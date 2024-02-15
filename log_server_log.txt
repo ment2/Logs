@@ -1,0 +1,171 @@
+user@Ubuntu:~$ cd /home/logs/
+
+user@Ubuntu:/home/logs$ su -
+
+Password: 
+
+root@Ubuntu:~# cd /home/logs/
+
+root@Ubuntu:/home/logs# vagrant ssh log
+
+[vagrant@log ~]$ sudo -i
+
+[root@log ~]# date
+
+Thu Feb 15 07:39:34 UTC 2024
+
+[root@log ~]# cp /usr/share/zoneinfo/Europe/Moscow /etc/localtime
+
+cp: overwrite '/etc/localtime'? y
+
+[root@log ~]# systemctl restart chronyd
+
+[root@log ~]# date
+
+Thu Feb 15 10:40:18 MSK 2024
+
+[root@log ~]# yum list rsyslog
+
+Failed to set locale, defaulting to C
+
+Loaded plugins: fastestmirror
+
+Determining fastest mirrors
+
+ * base: mirror.yandex.ru
+
+ * extras: mirror.truenetwork.ru
+
+ * updates: mirror.truenetwork.ru
+
+base                                                     | 3.6 kB     00:00     
+
+extras                                                   | 2.9 kB     00:00     
+
+updates                                                  | 2.9 kB     00:00     
+
+(1/4): base/7/x86_64/group_gz                              | 153 kB   00:00     
+
+(2/4): extras/7/x86_64/primary_db                          | 250 kB   00:01     
+
+(3/4): base/7/x86_64/primary_db                            | 6.1 MB   00:03     
+
+(4/4): updates/7/x86_64/primary_db                         |  25 MB   00:43     
+
+Installed Packages
+
+rsyslog.x86_64                    8.24.0-52.el7                        @anaconda
+
+Available Packages
+
+rsyslog.x86_64                    8.24.0-57.el7_9.3                    updates  
+
+[root@log ~]# vi /etc/rsyslog.conf
+
+[root@log ~]# systemctl restart rsyslog
+
+[root@log ~]# ss -tuln
+
+Netid  State      Recv-Q Send-Q Local Address:Port               Peer Address:Port              
+
+udp    UNCONN     0      0      127.0.0.1:323                   *:*                  
+
+udp    UNCONN     0      0         *:68                    *:*                  
+
+udp    UNCONN     0      0         *:111                   *:*                  
+
+udp    UNCONN     0      0         *:963                   *:*                  
+
+udp    UNCONN     0      0         *:514                   *:*                  
+
+udp    UNCONN     0      0         [::1]:323                [::]:*                  
+
+udp    UNCONN     0      0      [::]:111                [::]:*                  
+
+udp    UNCONN     0      0      [::]:963                [::]:*                  
+
+udp    UNCONN     0      0      [::]:514                [::]:*                  
+
+tcp    LISTEN     0      128       *:22                    *:*                  
+
+tcp    LISTEN     0      100    127.0.0.1:25                    *:*                  
+
+tcp    LISTEN     0      25        *:514                   *:*                  
+
+tcp    LISTEN     0      128       *:111                   *:*                  
+
+tcp    LISTEN     0      128    [::]:22                 [::]:*                  
+
+tcp    LISTEN     0      100       [::1]:25                 [::]:*                  
+
+tcp    LISTEN     0      25     [::]:514                [::]:*                  
+
+tcp    LISTEN     0      128    [::]:111                [::]:*                  
+
+[root@log ~]# cat /var/log/rsyslog/web/nginx_access.log
+
+Feb 15 10:59:43 web nginx_access: 192.168.56.1 - - [15/Feb/2024:10:59:43 +0300] "GET / HTTP/1.1" 200 4833 "-" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:122.0) Gecko/20100101 Firefox/122.0"
+
+Feb 15 10:59:43 web nginx_access: 192.168.56.1 - - [15/Feb/2024:10:59:43 +0300] "GET /img/centos-logo.png HTTP/1.1" 200 3030 "http://192.168.56.10/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:122.0) Gecko/20100101 Firefox/122.0"
+
+Feb 15 10:59:43 web nginx_access: 192.168.56.1 - - [15/Feb/2024:10:59:43 +0300] "GET /img/html-background.png HTTP/1.1" 200 1801 "http://192.168.56.10/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:122.0) Gecko/20100101 Firefox/122.0"
+
+Feb 15 10:59:43 web nginx_access: 192.168.56.1 - - [15/Feb/2024:10:59:43 +0300] "GET /img/header-background.png HTTP/1.1" 404 3650 "http://192.168.56.10/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:122.0) Gecko/20100101 Firefox/122.0"
+
+Feb 15 10:59:43 web nginx_access: 192.168.56.1 - - [15/Feb/2024:10:59:43 +0300] "GET /favicon.ico HTTP/1.1" 404 3650 "http://192.168.56.10/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:122.0) Gecko/20100101 Firefox/122.0"
+
+[root@log ~]# cat /var/log/rsyslog/web/nginx_error.log
+
+Feb 15 10:59:43 web nginx_error: 2024/02/15 10:59:43 [error] 3350#3350: *1 open() "/usr/share/nginx/html/img/header-background.png" failed (2: No such file or directory), client: 192.168.56.1, server: _, request: "GET /img/header-background.png HTTP/1.1", host: "192.168.56.10", referrer: "http://192.168.56.10/"
+
+[root@log ~]# grep web /var/log/audit/audit.log 
+
+node=web type=DAEMON_START msg=audit(1707985144.282:1035): op=start ver=2.8.5 format=raw kernel=3.10.0-1127.el7.x86_64 auid=4294967295 pid=3476 uid=0 ses=4294967295 subj=system_u:system_r:auditd_t:s0 res=success
+
+node=web type=CONFIG_CHANGE msg=audit(1707985144.463:1005): auid=4294967295 ses=4294967295 subj=system_u:system_r:unconfined_service_t:s0 op=remove_rule key="nginx_conf" list=4 res=1
+
+node=web type=CONFIG_CHANGE msg=audit(1707985144.468:1006): auid=4294967295 ses=4294967295 subj=system_u:system_r:unconfined_service_t:s0 op=remove_rule key="nginx_conf" list=4 res=1
+
+node=web type=CONFIG_CHANGE msg=audit(1707985144.469:1007): audit_backlog_limit=8192 old=8192 auid=4294967295 ses=4294967295 subj=system_u:system_r:unconfined_service_t:s0 res=1
+
+node=web type=CONFIG_CHANGE msg=audit(1707985144.469:1008): audit_failure=1 old=1 auid=4294967295 ses=4294967295 subj=system_u:system_r:unconfined_service_t:s0 res=1
+
+node=web type=CONFIG_CHANGE msg=audit(1707985144.469:1009): auid=4294967295 ses=4294967295 subj=system_u:system_r:unconfined_service_t:s0 op=add_rule key="nginx_conf" list=4 res=1
+
+node=web type=CONFIG_CHANGE msg=audit(1707985144.469:1010): auid=4294967295 ses=4294967295 subj=system_u:system_r:unconfined_service_t:s0 op=add_rule key="nginx_conf" list=4 res=1
+
+node=web type=SERVICE_START msg=audit(1707985144.469:1011): pid=1 uid=0 auid=4294967295 ses=4294967295 subj=system_u:system_r:init_t:s0 msg='unit=auditd comm="systemd" exe="/usr/lib/systemd/systemd" hostname=? addr=? terminal=? res=success'
+
+node=web type=SYSCALL msg=audit(1707985475.486:1012): arch=c000003e syscall=268 success=yes exit=0 a0=ffffffffffffff9c a1=1503420 a2=1ed a3=7ffd96884d60 items=1 ppid=3090 pid=3509 auid=1000 uid=0 gid=0 euid=0 suid=0 fsuid=0 egid=0 sgid=0 fsgid=0 tty=pts0 ses=4 comm="chmod" exe="/usr/bin/chmod" subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key="nginx_conf"
+
+node=web type=CWD msg=audit(1707985475.486:1012):  cwd="/root"
+
+node=web type=PATH msg=audit(1707985475.486:1012): item=0 name="/etc/nginx/nginx.conf" inode=15359 dev=08:01 mode=0100644 ouid=0 ogid=0 rdev=00:00 obj=system_u:object_r:httpd_config_t:s0 objtype=NORMAL cap_fp=0000000000000000 cap_fi=0000000000000000 cap_fe=0 cap_fver=0
+
+node=web type=PROCTITLE msg=audit(1707985475.486:1012): proctitle=63686D6F64002B78002F6574632F6E67696E782F6E67696E782E636F6E66
+
+[root@log ~]# 
+
+----------------------------------------------------------------------
+user@Ubuntu:~$ su -
+
+Password: 
+
+root@Ubuntu:~# cd /home/logs/
+
+root@Ubuntu:/home/logs# vagrant ssh log
+
+Last login: Thu Feb 15 10:39:19 2024 from 10.0.2.2
+
+[vagrant@log ~]$ sudo -i
+
+[root@log ~]# vi /etc/audit/auditd.conf
+
+[root@log ~]# service auditd restart
+
+Stopping logging:                                          [  OK  ]
+
+Redirecting start to /bin/systemctl start auditd.service
+
+[root@log ~]# 
+

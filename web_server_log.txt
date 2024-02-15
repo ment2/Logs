@@ -1,0 +1,700 @@
+
+[vagrant@web ~]$ sudo -i
+
+[root@web ~]# /usr/share/zoneinfo/Europe/Moscow /etc/localtime
+
+-bash: /usr/share/zoneinfo/Europe/Moscow: Permission denied
+
+[root@web ~]# sudo ln -sf /usr/share/zoneinfo/Europe/Moscow /etc/localtime
+
+[root@web ~]# cp /usr/share/zoneinfo/Europe/Moscow /etc/localtime
+
+cp: '/usr/share/zoneinfo/Europe/Moscow' and '/etc/localtime' are the same file
+
+[root@web ~]# systemctl restart chronyd
+
+[root@web ~]# systemctl status chronyd
+
+● chronyd.service - NTP client/server
+
+   Loaded: loaded (/usr/lib/systemd/system/chronyd.service; enabled; vendor preset: enabled)
+
+   Active: active (running) since Thu 2024-02-15 10:36:57 MSK; 16s ago
+
+     Docs: man:chronyd(8)
+
+           man:chrony.conf(5)
+
+  Process: 3126 ExecStartPost=/usr/libexec/chrony-helper update-daemon (code=exited, status=0/SUCCESS)
+
+  Process: 3122 ExecStart=/usr/sbin/chronyd $OPTIONS (code=exited, status=0/SUCCESS)
+
+ Main PID: 3124 (chronyd)
+
+   CGroup: /system.slice/chronyd.service
+
+           └─3124 /usr/sbin/chronyd
+
+
+
+Feb 15 10:36:57 web systemd[1]: Starting NTP client/server...
+
+Feb 15 10:36:57 web chronyd[3124]: chronyd version 3.4 starting (+CMDMON +N...G)
+
+Feb 15 10:36:57 web chronyd[3124]: Frequency 5.334 +/- 41.345 ppm read from...ft
+
+Feb 15 10:36:57 web systemd[1]: Started NTP client/server.
+
+Feb 15 10:37:04 web chronyd[3124]: Selected source 83.168.200.199
+
+Feb 15 10:37:05 web chronyd[3124]: Selected source 178.63.52.31
+
+Feb 15 10:37:06 web chronyd[3124]: Source 45.142.247.74 replaced with 78.47...55
+
+Hint: Some lines were ellipsized, use -l to show in full.
+
+[root@web ~]# date
+
+Thu Feb 15 10:37:44 MSK 2024
+
+[root@web ~]# yum install epel-release
+
+Failed to set locale, defaulting to C
+
+Loaded plugins: fastestmirror
+
+Determining fastest mirrors
+
+ * base: mirror.hyperdedic.ru
+
+ * extras: mirror.hyperdedic.ru
+
+ * updates: mirror.hyperdedic.ru
+
+base                                                     | 3.6 kB     00:00     
+
+extras                                                   | 2.9 kB     00:00     
+
+updates                                                  | 2.9 kB     00:00     
+
+(1/4): extras/7/x86_64/primary_db                          | 250 kB   00:00     
+
+(2/4): base/7/x86_64/group_gz                              | 153 kB   00:01     
+
+(3/4): updates/7/x86_64/primary_db                         |  25 MB   00:25     
+
+(4/4): base/7/x86_64/primary_db                            | 6.1 MB   01:02     
+
+Resolving Dependencies
+
+--> Running transaction check
+
+---> Package epel-release.noarch 0:7-11 will be installed
+
+--> Finished Dependency Resolution
+
+
+
+Dependencies Resolved
+
+
+
+================================================================================
+
+ Package                Arch             Version         Repository        Size
+
+================================================================================
+
+Installing:
+
+ epel-release           noarch           7-11            extras            15 k
+
+
+
+Transaction Summary
+
+================================================================================
+
+Install  1 Package
+
+
+
+Total download size: 15 k
+
+Installed size: 24 k
+
+Is this ok [y/d/N]: y
+
+Downloading packages:
+
+warning: /var/cache/yum/x86_64/7/extras/packages/epel-release-7-11.noarch.rpm: Header V3 RSA/SHA256 Signature, key ID f4a80eb5: NOKEY
+
+Public key for epel-release-7-11.noarch.rpm is not installed
+
+epel-release-7-11.noarch.rpm                               |  15 kB   00:01     
+
+Retrieving key from file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+
+Importing GPG key 0xF4A80EB5:
+
+ Userid     : "CentOS-7 Key (CentOS 7 Official Signing Key) <security@centos.org>"
+
+ Fingerprint: 6341 ab27 53d7 8a78 a7c2 7bb1 24c6 a8a7 f4a8 0eb5
+
+ Package    : centos-release-7-8.2003.0.el7.centos.x86_64 (@anaconda)
+
+ From       : /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+
+Is this ok [y/N]: y
+
+Running transaction check
+
+Running transaction test
+
+Transaction test succeeded
+
+Running transaction
+
+  Installing : epel-release-7-11.noarch                                     1/1 
+
+  Verifying  : epel-release-7-11.noarch                                     1/1 
+
+
+
+Installed:
+
+  epel-release.noarch 0:7-11                                                    
+
+
+
+Complete!
+
+[root@web ~]# yum install -y nginx 
+
+Failed to set locale, defaulting to C
+
+Loaded plugins: fastestmirror
+
+Loading mirror speeds from cached hostfile
+
+epel/x86_64/metalink                                     | 7.7 kB     00:00     
+
+ * base: mirror.hyperdedic.ru
+
+ * epel: ftp.riken.jp
+
+ * extras: mirror.hyperdedic.ru
+
+ * updates: mirror.hyperdedic.ru
+
+epel                                                     | 4.7 kB     00:00     
+
+epel/x86_64/updateinfo         FAILED                                          
+
+https://repo2.shinjiru.com/epel/7/x86_64/repodata/5c12d1bf5cac7d63c718c53a84ba538494562ffcec6263c26ab5774d04e673bd-updateinfo.xml.bz2: [Errno 14] HTTPS Error 404 - Not Found
+
+Trying other mirror.
+
+To address this issue please refer to the below wiki article 
+
+
+
+https://wiki.centos.org/yum-errors
+
+
+
+If above article doesn't help to resolve this issue please use https://bugs.centos.org/.
+
+
+
+epel/x86_64/updateinfo         FAILED                                           
+
+https://ftp.yz.yamagata-u.ac.jp/pub/linux/fedora-projects/epel/7/x86_64/repodata/5c12d1bf5cac7d63c718c53a84ba538494562ffcec6263c26ab5774d04e673bd-updateinfo.xml.bz2: [Errno 14] HTTPS Error 404 - Not Found
+
+Trying other mirror.
+
+(1/3): epel/x86_64/group_gz                                | 100 kB   00:03     
+
+epel/x86_64/updateinfo         FAILED                                           
+
+https://mirror.nju.edu.cn/epel/7/x86_64/repodata/5c12d1bf5cac7d63c718c53a84ba538494562ffcec6263c26ab5774d04e673bd-updateinfo.xml.bz2: [Errno 14] HTTPS Error 404 - Not Found
+
+Trying other mirror.
+
+(2/3): epel/x86_64/primary_db                              | 7.0 MB   00:06     
+
+(3/3): epel/x86_64/updateinfo                              | 1.0 MB   00:01     
+
+Resolving Dependencies
+
+--> Running transaction check
+
+---> Package nginx.x86_64 1:1.20.1-10.el7 will be installed
+
+--> Processing Dependency: nginx-filesystem = 1:1.20.1-10.el7 for package: 1:nginx-1.20.1-10.el7.x86_64
+
+--> Processing Dependency: libcrypto.so.1.1(OPENSSL_1_1_0)(64bit) for package: 1:nginx-1.20.1-10.el7.x86_64
+
+--> Processing Dependency: libssl.so.1.1(OPENSSL_1_1_0)(64bit) for package: 1:nginx-1.20.1-10.el7.x86_64
+
+--> Processing Dependency: libssl.so.1.1(OPENSSL_1_1_1)(64bit) for package: 1:nginx-1.20.1-10.el7.x86_64
+
+--> Processing Dependency: nginx-filesystem for package: 1:nginx-1.20.1-10.el7.x86_64
+
+--> Processing Dependency: redhat-indexhtml for package: 1:nginx-1.20.1-10.el7.x86_64
+
+--> Processing Dependency: system-logos for package: 1:nginx-1.20.1-10.el7.x86_64
+
+--> Processing Dependency: libcrypto.so.1.1()(64bit) for package: 1:nginx-1.20.1-10.el7.x86_64
+
+--> Processing Dependency: libprofiler.so.0()(64bit) for package: 1:nginx-1.20.1-10.el7.x86_64
+
+--> Processing Dependency: libssl.so.1.1()(64bit) for package: 1:nginx-1.20.1-10.el7.x86_64
+
+--> Running transaction check
+
+---> Package centos-indexhtml.noarch 0:7-9.el7.centos will be installed
+
+---> Package centos-logos.noarch 0:70.0.6-3.el7.centos will be installed
+
+---> Package gperftools-libs.x86_64 0:2.6.1-1.el7 will be installed
+
+---> Package nginx-filesystem.noarch 1:1.20.1-10.el7 will be installed
+
+---> Package openssl11-libs.x86_64 1:1.1.1k-7.el7 will be installed
+
+--> Finished Dependency Resolution
+
+
+
+Dependencies Resolved
+
+
+
+================================================================================
+
+ Package                Arch         Version                   Repository  Size
+
+================================================================================
+
+Installing:
+
+ nginx                  x86_64       1:1.20.1-10.el7           epel       588 k
+
+Installing for dependencies:
+
+ centos-indexhtml       noarch       7-9.el7.centos            base        92 k
+
+ centos-logos           noarch       70.0.6-3.el7.centos       base        21 M
+
+ gperftools-libs        x86_64       2.6.1-1.el7               base       272 k
+
+ nginx-filesystem       noarch       1:1.20.1-10.el7           epel        24 k
+
+ openssl11-libs         x86_64       1:1.1.1k-7.el7            epel       1.5 M
+
+
+
+Transaction Summary
+
+================================================================================
+
+Install  1 Package (+5 Dependent packages)
+
+
+
+Total download size: 24 M
+
+Installed size: 28 M
+
+Downloading packages:
+
+(1/6): centos-indexhtml-7-9.el7.centos.noarch.rpm          |  92 kB   00:00     
+
+(2/6): gperftools-libs-2.6.1-1.el7.x86_64.rpm              | 272 kB   00:01     
+
+warning: /var/cache/yum/x86_64/7/epel/packages/nginx-filesystem-1.20.1-10.el7.noarch.rpm: Header V4 RSA/SHA256 Signature, key ID 352c64e5: NOKEY
+
+Public key for nginx-filesystem-1.20.1-10.el7.noarch.rpm is not installed
+
+(3/6): nginx-filesystem-1.20.1-10.el7.noarch.rpm           |  24 kB   00:02     
+
+(4/6): nginx-1.20.1-10.el7.x86_64.rpm                      | 588 kB   00:03     
+
+(5/6): centos-logos-70.0.6-3.el7.centos.noarch.rpm         |  21 MB   00:04     
+
+(6/6): openssl11-libs-1.1.1k-7.el7.x86_64.rpm              | 1.5 MB   01:38     
+
+--------------------------------------------------------------------------------
+
+Total                                              244 kB/s |  24 MB  01:39     
+
+Retrieving key from file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7
+
+Importing GPG key 0x352C64E5:
+
+ Userid     : "Fedora EPEL (7) <epel@fedoraproject.org>"
+
+ Fingerprint: 91e9 7d7c 4a5e 96f1 7f3e 888f 6a2f aea2 352c 64e5
+
+ Package    : epel-release-7-11.noarch (@extras)
+
+ From       : /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7
+
+Running transaction check
+
+Running transaction test
+
+Transaction test succeeded
+
+Running transaction
+
+  Installing : centos-logos-70.0.6-3.el7.centos.noarch                      1/6 
+
+  Installing : centos-indexhtml-7-9.el7.centos.noarch                       2/6 
+
+  Installing : 1:openssl11-libs-1.1.1k-7.el7.x86_64                         3/6 
+
+  Installing : gperftools-libs-2.6.1-1.el7.x86_64                           4/6 
+
+  Installing : 1:nginx-filesystem-1.20.1-10.el7.noarch                      5/6 
+
+  Installing : 1:nginx-1.20.1-10.el7.x86_64                                 6/6 
+
+  Verifying  : 1:nginx-filesystem-1.20.1-10.el7.noarch                      1/6 
+
+  Verifying  : gperftools-libs-2.6.1-1.el7.x86_64                           2/6 
+
+  Verifying  : 1:nginx-1.20.1-10.el7.x86_64                                 3/6 
+
+  Verifying  : 1:openssl11-libs-1.1.1k-7.el7.x86_64                         4/6 
+
+  Verifying  : centos-indexhtml-7-9.el7.centos.noarch                       5/6 
+
+  Verifying  : centos-logos-70.0.6-3.el7.centos.noarch                      6/6 
+
+
+
+Installed:
+
+  nginx.x86_64 1:1.20.1-10.el7                                                  
+
+
+
+Dependency Installed:
+
+  centos-indexhtml.noarch 0:7-9.el7.centos                                      
+
+  centos-logos.noarch 0:70.0.6-3.el7.centos                                     
+
+  gperftools-libs.x86_64 0:2.6.1-1.el7                                          
+
+  nginx-filesystem.noarch 1:1.20.1-10.el7                                       
+
+  openssl11-libs.x86_64 1:1.1.1k-7.el7                                          
+
+
+
+Complete!
+
+[root@web ~]# systemctl status nginx.service 
+
+● nginx.service - The nginx HTTP and reverse proxy server
+
+   Loaded: loaded (/usr/lib/systemd/system/nginx.service; disabled; vendor preset: disabled)
+
+   Active: inactive (dead)
+
+[root@web ~]# systemctl start nginx.service 
+
+[root@web ~]# systemctl status nginx.service 
+
+● nginx.service - The nginx HTTP and reverse proxy server
+
+   Loaded: loaded (/usr/lib/systemd/system/nginx.service; disabled; vendor preset: disabled)
+
+   Active: active (running) since Thu 2024-02-15 10:45:35 MSK; 2s ago
+
+  Process: 3268 ExecStart=/usr/sbin/nginx (code=exited, status=0/SUCCESS)
+
+  Process: 3265 ExecStartPre=/usr/sbin/nginx -t (code=exited, status=0/SUCCESS)
+
+  Process: 3264 ExecStartPre=/usr/bin/rm -f /run/nginx.pid (code=exited, status=0/SUCCESS)
+
+ Main PID: 3270 (nginx)
+
+   CGroup: /system.slice/nginx.service
+
+           ├─3270 nginx: master process /usr/sbin/nginx
+
+           └─3272 nginx: worker process
+
+
+
+Feb 15 10:45:35 web systemd[1]: Starting The nginx HTTP and reverse proxy s.....
+
+Feb 15 10:45:35 web nginx[3265]: nginx: the configuration file /etc/nginx/n...ok
+
+Feb 15 10:45:35 web nginx[3265]: nginx: configuration file /etc/nginx/nginx...ul
+
+Feb 15 10:45:35 web systemd[1]: Started The nginx HTTP and reverse proxy server.
+
+Hint: Some lines were ellipsized, use -l to show in full.
+
+[root@web ~]# ss -tln | grep 80
+
+LISTEN     0      128          *:80                       *:*                  
+
+LISTEN     0      128       [::]:80                    [::]:*                  
+
+[root@web ~]# rpm -qa | grep nginx
+
+nginx-filesystem-1.20.1-10.el7.noarch
+
+nginx-1.20.1-10.el7.x86_64
+
+[root@web ~]# vi /etc/nginx/nginx.conf
+
+[root@web ~]# ngnix -t
+
+-bash: ngnix: command not found
+
+[root@web ~]# nginx -t
+
+nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+
+[root@web ~]# systemctl restart nginx.service
+
+[root@web ~]# rm /usr/share/nginx/html/img/header-background.png
+
+rm: remove regular file '/usr/share/nginx/html/img/header-background.png'? y
+
+[root@web ~]# rpm -qa | grep audit
+
+audit-2.8.5-4.el7.x86_64
+
+audit-libs-2.8.5-4.el7.x86_64
+
+[root@web ~]# vi /etc/audit/rules.d/audit.rules
+
+[root@web ~]# service auditd restart
+
+Stopping logging:                                          [  OK  ]
+
+Redirecting start to /bin/systemctl start auditd.service
+
+[root@web ~]# vi etc/nginx/nginx.conf
+
+[root@web ~]# vi /etc/nginx/nginx.conf
+
+[root@web ~]# ausearch -f /etc/nginx/nginx.confq
+
+<no matches>
+
+[root@web ~]# ausearch -f /etc/nginx/nginx.conf
+
+----
+
+time->Thu Feb 15 11:12:34 2024
+
+type=CONFIG_CHANGE msg=audit(1707984754.331:993): auid=1000 ses=4 op=updated_rules path="/etc/nginx/nginx.conf" key="nginx_conf" list=4 res=1
+
+----
+
+time->Thu Feb 15 11:12:34 2024
+
+type=PROCTITLE msg=audit(1707984754.331:994): proctitle=7669002F6574632F6E67696E782F6E67696E782E636F6E66
+
+type=PATH msg=audit(1707984754.331:994): item=3 name="/etc/nginx/nginx.conf~" inode=11575 dev=08:01 mode=0100644 ouid=0 ogid=0 rdev=00:00 obj=system_u:object_r:httpd_config_t:s0 objtype=CREATE cap_fp=0000000000000000 cap_fi=0000000000000000 cap_fe=0 cap_fver=0
+
+type=PATH msg=audit(1707984754.331:994): item=2 name="/etc/nginx/nginx.conf" inode=11575 dev=08:01 mode=0100644 ouid=0 ogid=0 rdev=00:00 obj=system_u:object_r:httpd_config_t:s0 objtype=DELETE cap_fp=0000000000000000 cap_fi=0000000000000000 cap_fe=0 cap_fver=0
+
+type=PATH msg=audit(1707984754.331:994): item=1 name="/etc/nginx/" inode=85 dev=08:01 mode=040755 ouid=0 ogid=0 rdev=00:00 obj=system_u:object_r:httpd_config_t:s0 objtype=PARENT cap_fp=0000000000000000 cap_fi=0000000000000000 cap_fe=0 cap_fver=0
+
+type=PATH msg=audit(1707984754.331:994): item=0 name="/etc/nginx/" inode=85 dev=08:01 mode=040755 ouid=0 ogid=0 rdev=00:00 obj=system_u:object_r:httpd_config_t:s0 objtype=PARENT cap_fp=0000000000000000 cap_fi=0000000000000000 cap_fe=0 cap_fver=0
+
+type=CWD msg=audit(1707984754.331:994):  cwd="/root"
+
+type=SYSCALL msg=audit(1707984754.331:994): arch=c000003e syscall=82 success=yes exit=0 a0=1141a20 a1=114b870 a2=fffffffffffffe80 a3=7ffd40f322e0 items=4 ppid=3090 pid=3421 auid=1000 uid=0 gid=0 euid=0 suid=0 fsuid=0 egid=0 sgid=0 fsgid=0 tty=pts0 ses=4 comm="vi" exe="/usr/bin/vi" subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key="nginx_conf"
+
+----
+
+time->Thu Feb 15 11:12:34 2024
+
+type=CONFIG_CHANGE msg=audit(1707984754.331:995): auid=1000 ses=4 op=updated_rules path="/etc/nginx/nginx.conf" key="nginx_conf" list=4 res=1
+
+----
+
+time->Thu Feb 15 11:12:34 2024
+
+type=PROCTITLE msg=audit(1707984754.331:996): proctitle=7669002F6574632F6E67696E782F6E67696E782E636F6E66
+
+type=PATH msg=audit(1707984754.331:996): item=1 name="/etc/nginx/nginx.conf" inode=15359 dev=08:01 mode=0100644 ouid=0 ogid=0 rdev=00:00 obj=unconfined_u:object_r:httpd_config_t:s0 objtype=CREATE cap_fp=0000000000000000 cap_fi=0000000000000000 cap_fe=0 cap_fver=0
+
+type=PATH msg=audit(1707984754.331:996): item=0 name="/etc/nginx/" inode=85 dev=08:01 mode=040755 ouid=0 ogid=0 rdev=00:00 obj=system_u:object_r:httpd_config_t:s0 objtype=PARENT cap_fp=0000000000000000 cap_fi=0000000000000000 cap_fe=0 cap_fver=0
+
+type=CWD msg=audit(1707984754.331:996):  cwd="/root"
+
+type=SYSCALL msg=audit(1707984754.331:996): arch=c000003e syscall=2 success=yes exit=3 a0=1141a20 a1=241 a2=1a4 a3=0 items=2 ppid=3090 pid=3421 auid=1000 uid=0 gid=0 euid=0 suid=0 fsuid=0 egid=0 sgid=0 fsgid=0 tty=pts0 ses=4 comm="vi" exe="/usr/bin/vi" subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key="nginx_conf"
+
+----
+
+time->Thu Feb 15 11:12:34 2024
+
+type=PROCTITLE msg=audit(1707984754.336:997): proctitle=7669002F6574632F6E67696E782F6E67696E782E636F6E66
+
+type=PATH msg=audit(1707984754.336:997): item=0 name="/etc/nginx/nginx.conf" inode=15359 dev=08:01 mode=0100644 ouid=0 ogid=0 rdev=00:00 obj=unconfined_u:object_r:httpd_config_t:s0 objtype=NORMAL cap_fp=0000000000000000 cap_fi=0000000000000000 cap_fe=0 cap_fver=0
+
+type=CWD msg=audit(1707984754.336:997):  cwd="/root"
+
+type=SYSCALL msg=audit(1707984754.336:997): arch=c000003e syscall=188 success=yes exit=0 a0=1141a20 a1=7f740c72ef6a a2=114edd0 a3=24 items=1 ppid=3090 pid=3421 auid=1000 uid=0 gid=0 euid=0 suid=0 fsuid=0 egid=0 sgid=0 fsgid=0 tty=pts0 ses=4 comm="vi" exe="/usr/bin/vi" subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key="nginx_conf"
+
+----
+
+time->Thu Feb 15 11:12:34 2024
+
+type=PROCTITLE msg=audit(1707984754.336:998): proctitle=7669002F6574632F6E67696E782F6E67696E782E636F6E66
+
+type=PATH msg=audit(1707984754.336:998): item=0 name="/etc/nginx/nginx.conf" inode=15359 dev=08:01 mode=0100644 ouid=0 ogid=0 rdev=00:00 obj=system_u:object_r:httpd_config_t:s0 objtype=NORMAL cap_fp=0000000000000000 cap_fi=0000000000000000 cap_fe=0 cap_fver=0
+
+type=CWD msg=audit(1707984754.336:998):  cwd="/root"
+
+type=SYSCALL msg=audit(1707984754.336:998): arch=c000003e syscall=90 success=yes exit=0 a0=1141a20 a1=81a4 a2=0 a3=24 items=1 ppid=3090 pid=3421 auid=1000 uid=0 gid=0 euid=0 suid=0 fsuid=0 egid=0 sgid=0 fsgid=0 tty=pts0 ses=4 comm="vi" exe="/usr/bin/vi" subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key="nginx_conf"
+
+----
+
+time->Thu Feb 15 11:12:34 2024
+
+type=PROCTITLE msg=audit(1707984754.336:999): proctitle=7669002F6574632F6E67696E782F6E67696E782E636F6E66
+
+type=PATH msg=audit(1707984754.336:999): item=0 name="/etc/nginx/nginx.conf" inode=15359 dev=08:01 mode=0100644 ouid=0 ogid=0 rdev=00:00 obj=system_u:object_r:httpd_config_t:s0 objtype=NORMAL cap_fp=0000000000000000 cap_fi=0000000000000000 cap_fe=0 cap_fver=0
+
+type=CWD msg=audit(1707984754.336:999):  cwd="/root"
+
+type=SYSCALL msg=audit(1707984754.336:999): arch=c000003e syscall=188 success=yes exit=0 a0=1141a20 a1=7f740c2e4e2f a2=114eee0 a3=1c items=1 ppid=3090 pid=3421 auid=1000 uid=0 gid=0 euid=0 suid=0 fsuid=0 egid=0 sgid=0 fsgid=0 tty=pts0 ses=4 comm="vi" exe="/usr/bin/vi" subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key="nginx_conf"
+
+[root@web ~]# grep nginx_conf /var/log/audit/audit.log
+
+type=CONFIG_CHANGE msg=audit(1707984645.574:990): auid=4294967295 ses=4294967295 subj=system_u:system_r:unconfined_service_t:s0 op=add_rule key="nginx_conf" list=4 res=1
+
+type=CONFIG_CHANGE msg=audit(1707984645.574:991): auid=4294967295 ses=4294967295 subj=system_u:system_r:unconfined_service_t:s0 op=add_rule key="nginx_conf" list=4 res=1
+
+type=CONFIG_CHANGE msg=audit(1707984754.331:993): auid=1000 ses=4 op=updated_rules path="/etc/nginx/nginx.conf" key="nginx_conf" list=4 res=1
+
+type=SYSCALL msg=audit(1707984754.331:994): arch=c000003e syscall=82 success=yes exit=0 a0=1141a20 a1=114b870 a2=fffffffffffffe80 a3=7ffd40f322e0 items=4 ppid=3090 pid=3421 auid=1000 uid=0 gid=0 euid=0 suid=0 fsuid=0 egid=0 sgid=0 fsgid=0 tty=pts0 ses=4 comm="vi" exe="/usr/bin/vi" subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key="nginx_conf"
+
+type=CONFIG_CHANGE msg=audit(1707984754.331:995): auid=1000 ses=4 op=updated_rules path="/etc/nginx/nginx.conf" key="nginx_conf" list=4 res=1
+
+type=SYSCALL msg=audit(1707984754.331:996): arch=c000003e syscall=2 success=yes exit=3 a0=1141a20 a1=241 a2=1a4 a3=0 items=2 ppid=3090 pid=3421 auid=1000 uid=0 gid=0 euid=0 suid=0 fsuid=0 egid=0 sgid=0 fsgid=0 tty=pts0 ses=4 comm="vi" exe="/usr/bin/vi" subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key="nginx_conf"
+
+type=SYSCALL msg=audit(1707984754.336:997): arch=c000003e syscall=188 success=yes exit=0 a0=1141a20 a1=7f740c72ef6a a2=114edd0 a3=24 items=1 ppid=3090 pid=3421 auid=1000 uid=0 gid=0 euid=0 suid=0 fsuid=0 egid=0 sgid=0 fsgid=0 tty=pts0 ses=4 comm="vi" exe="/usr/bin/vi" subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key="nginx_conf"
+
+type=SYSCALL msg=audit(1707984754.336:998): arch=c000003e syscall=90 success=yes exit=0 a0=1141a20 a1=81a4 a2=0 a3=24 items=1 ppid=3090 pid=3421 auid=1000 uid=0 gid=0 euid=0 suid=0 fsuid=0 egid=0 sgid=0 fsgid=0 tty=pts0 ses=4 comm="vi" exe="/usr/bin/vi" subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key="nginx_conf"
+
+type=SYSCALL msg=audit(1707984754.336:999): arch=c000003e syscall=188 success=yes exit=0 a0=1141a20 a1=7f740c2e4e2f a2=114eee0 a3=1c items=1 ppid=3090 pid=3421 auid=1000 uid=0 gid=0 euid=0 suid=0 fsuid=0 egid=0 sgid=0 fsgid=0 tty=pts0 ses=4 comm="vi" exe="/usr/bin/vi" subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key="nginx_conf"
+
+[root@web ~]# yum -y install audispd-plugins
+
+Failed to set locale, defaulting to C
+
+Loaded plugins: fastestmirror
+
+Loading mirror speeds from cached hostfile
+
+ * base: mirror.hyperdedic.ru
+
+ * epel: mirror.nyist.edu.cn
+
+ * extras: mirror.hyperdedic.ru
+
+ * updates: mirror.hyperdedic.ru
+
+Resolving Dependencies
+
+--> Running transaction check
+
+---> Package audispd-plugins.x86_64 0:2.8.5-4.el7 will be installed
+
+--> Finished Dependency Resolution
+
+
+
+Dependencies Resolved
+
+
+
+=====================================================================================================================
+
+ Package                          Arch                    Version                        Repository             Size
+
+=====================================================================================================================
+
+Installing:
+
+ audispd-plugins                  x86_64                  2.8.5-4.el7                    base                   53 k
+
+
+
+Transaction Summary
+
+=====================================================================================================================
+
+Install  1 Package
+
+
+
+Total download size: 53 k
+
+Installed size: 86 k
+
+Downloading packages:
+
+audispd-plugins-2.8.5-4.el7.x86_64.rpm                                                        |  53 kB  00:00:00     
+
+Running transaction check
+
+Running transaction test
+
+Transaction test succeeded
+
+Running transaction
+
+  Installing : audispd-plugins-2.8.5-4.el7.x86_64                                                                1/1 
+
+  Verifying  : audispd-plugins-2.8.5-4.el7.x86_64                                                                1/1 
+
+
+
+Installed:
+
+  audispd-plugins.x86_64 0:2.8.5-4.el7                                                                               
+
+
+
+Complete!
+
+[root@web ~]# vi /etc/audit/auditd.conf
+
+[root@web ~]# vi /etc/audisp/plugins.d/au-remote.conf
+
+[root@web ~]# vi /etc/audisp/plugins.d/au-remote.conf
+
+[root@web ~]# vi /etc/audisp/audisp-remote.conf
+
+[root@web ~]# service auditd restart
+
+Stopping logging:                                          [  OK  ]
+
+Redirecting start to /bin/systemctl start auditd.service
+
+[root@web ~]# ls -l /etc/nginx/nginx.conf
+
+-rw-r--r--. 1 root root 2481 Feb 15 11:12 /etc/nginx/nginx.conf
+
+[root@web ~]# chmod +x /etc/nginx/nginx.conf
+
+[root@web ~]# 
+
+
